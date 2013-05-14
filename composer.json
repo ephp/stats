@@ -1,0 +1,22 @@
+{
+    "name": "ephp/stats",
+    "type": "symfony-bundle",
+    "description": "Bundle statistico",
+    "keywords": ["statistiche", "ephp", "symfony-2.1"],
+    "homepage": "https://github.com/ephp/stats",
+    "license": "MIT",
+    "authors": [
+            {
+                "name": "Ephraim Pepe",
+                "email": "ephraim.pepe@gmail.com"
+            }
+    ],
+    "require": {
+            "php": ">=5.4"
+    },
+    "autoload": {
+            "psr-0": { "Ephp\\StatsBundle": "" }
+    },
+    "target-dir": "Ephp/StatsBundle",
+    "minimum-stability": "dev"
+}
