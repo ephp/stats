@@ -1,0 +1,5 @@
+<ul>
+    {% for visita in visite %}
+        <li><span class="date-stamp" time="{{ visita.openAt|date("Y-m-d H:i:s") }}"></span> <a href="{{ visita.url }}">{{ visita.url }}</a></li>
+    {% endfor %}
+</ul>

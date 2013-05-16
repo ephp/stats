@@ -262,7 +262,7 @@ class Visita {
      */
     public function prePersist() {
         $this->url = str_replace('/app_dev.php', '', $this->url);
-        $this->open_at = new \DateTime();
+        $this->open_at = new \DateTime('now', new \DateTimeZone("Europe/Rome"));
         $this->uid = md5($this->url);
     }
 
