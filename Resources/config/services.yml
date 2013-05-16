@@ -1,0 +1,6 @@
+services:
+    controller.pre_listener_execute:
+        class: Ephp\StatsBundle\Listener\Generator
+        arguments: ["@router", "@service_container", "@doctrine.orm.entity_manager"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

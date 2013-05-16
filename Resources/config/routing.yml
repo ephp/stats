@@ -1,0 +1,4 @@
+EphpStatsBundle_index:
+    pattern:  /stats
+    defaults: { _controller: EphpStatsBundle:Stats:index }
+        
