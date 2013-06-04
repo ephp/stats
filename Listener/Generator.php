@@ -72,7 +72,8 @@ class Generator {
         /* @var $rc \Symfony\Component\Routing\RouteCollection */
 
         $route = $rc->get($this->request->get('_route'));
-        if(!$route) return false;
+        if (!$route)
+            return false;
         $stats = $route->getOption('stats');
         // Verifico che sia stata richiesta la memorizzazione delle statistiche
         if ($stats && is_array($stats)) {
@@ -128,15 +129,15 @@ class Generator {
                         'column' => 'id',
                         'param' => 'id',
                         'output' => 'id',
-                    ), $options['entity']);
+                            ), $options['entity']);
                 }
                 // Se il parametro esiste, vado avanti e configuro la nuova area
                 if (isset($route_params[$options['entity']['param']])) {
                     $param = $route_params[$options['entity']['param']];
                     $_entity = $this->em->getRepository($options['entity']['entity']);
                     $entity = $_entity->findOneBy(array($options['entity']['column'] => $param));
-                    $fx = \Doctrine\Common\Util\Inflector::camelize("get_".$options['entity']['output']);
-                    $area = $options['entity']['prefix'].'-'.$entity->$fx();
+                    $fx = \Doctrine\Common\Util\Inflector::camelize("get_" . $options['entity']['output']);
+                    $area = $options['entity']['prefix'] . '-' . $entity->$fx();
                     // Se c'è solo l'area default l'unica area che verrà memorizzata 
                     // sarà quella dinamica, altrimenti aggiungo all'array delle aree
                     if (count($options['area']) == 1 && $options['area'][0] == 'default') {
@@ -146,34 +147,38 @@ class Generator {
                     }
                 }
             }
-            try {
-                $this->em->beginTransaction();
-                $visita = new \Ephp\StatsBundle\Entity\Visita();
-                $visita->setUrl($this->router->generate($route, $route_params));
-                $visita->setRoute($route);
-                $visita->setRouteParams($route_params);
-                $visita->setSession($this->request->getSession()->getId());
-                $visita->setIp($this->request->getClientIp());
-                $visita->setUserAgent($this->request->server->get('HTTP_USER_AGENT'));
-                $locale = $this->request->getLanguages();
-                $visita->setLocale(array_shift($locale));
-                foreach ($options['area'] as $_area) {
-                    $area = $this->em->getRepository('EphpStatsBundle:Area')->findOneBy(array('area' => $_area));
-                    if(!$area) {
-                        $area = new \Ephp\StatsBundle\Entity\Area();
-                        $area->setArea($_area);
-                        $this->em->persist($area);
-                        $this->em->flush();
+            $_url = $this->router->generate($route, $route_params);
+            $test = preg_match('/.(php|jsp|asp|aspx|html|jpg|jpeg|gif|png)/', $_url);
+            if (count($test) == 0) {
+                try {
+                    $this->em->beginTransaction();
+                    $visita = new \Ephp\StatsBundle\Entity\Visita();
+                    $visita->setUrl($_url);
+                    $visita->setRoute($route);
+                    $visita->setRouteParams($route_params);
+                    $visita->setSession($this->request->getSession()->getId());
+                    $visita->setIp($this->request->getClientIp());
+                    $visita->setUserAgent($this->request->server->get('HTTP_USER_AGENT'));
+                    $locale = $this->request->getLanguages();
+                    $visita->setLocale(array_shift($locale));
+                    foreach ($options['area'] as $_area) {
+                        $area = $this->em->getRepository('EphpStatsBundle:Area')->findOneBy(array('area' => $_area));
+                        if (!$area) {
+                            $area = new \Ephp\StatsBundle\Entity\Area();
+                            $area->setArea($_area);
+                            $this->em->persist($area);
+                            $this->em->flush();
+                        }
+                        $visita->addAree($area);
                     }
-                    $visita->addAree($area);
+                    $this->em->persist($visita);
+                    $this->em->flush();
+                    $this->em->commit();
+                } catch (\Exception $e) {
+                    \Ephp\UtilityBundle\Utility\Debug::vd($e);
+                    $this->em->rollback();
+                    throw $e;
                 }
-                $this->em->persist($visita);
-                $this->em->flush();
-                $this->em->commit();
-            } catch (\Exception $e) {
-                \Ephp\UtilityBundle\Utility\Debug::vd($e);
-                $this->em->rollback();
-                throw $e;
             }
         }
     }
