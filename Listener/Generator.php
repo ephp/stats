@@ -148,8 +148,8 @@ class Generator {
                 }
             }
             $_url = $this->router->generate($route, $route_params);
-            $test = preg_match('/.(php|jsp|asp|aspx|html|jpg|jpeg|gif|png)/', $_url);
-            if (count($test) == 0) {
+            $test = preg_match('/.(php|jsp|asp|aspx|html|jpg|jpeg|gif|png)$/', $_url);
+            if ($test == 0) {
                 try {
                     $this->em->beginTransaction();
                     $visita = new \Ephp\StatsBundle\Entity\Visita();
