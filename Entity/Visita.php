@@ -8,10 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
  * Visita
  *
  * @ORM\Table(name="stats_visite", indexes={
- *            @ORM\index(name="route_idx", columns={"route"}),
- *            @ORM\index(name="uid_idx", columns={"uid"}),
- *            @ORM\index(name="ip_idx", columns={"ip"}),
- *            @ORM\index(name="open_at_idx", columns={"open_at"})
+ *            @ORM\Index(name="route_idx", columns={"route"}),
+ *            @ORM\Index(name="uid_idx", columns={"uid"}),
+ *            @ORM\Index(name="ip_idx", columns={"ip"}),
+ *            @ORM\Index(name="open_at_idx", columns={"open_at"})
  * })
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="Ephp\StatsBundle\Entity\VisitaRepository")
