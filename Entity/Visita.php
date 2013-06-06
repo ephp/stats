@@ -9,8 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="stats_visite", indexes={
  *            @ORM\Index(name="route_idx", columns={"route"}),
- *            @ORM\Index(name="uid_idx", columns={"uid"}),
  *            @ORM\Index(name="ip_idx", columns={"ip"}),
+ *            @ORM\Index(name="uid_idx", columns={"uid"}),
  *            @ORM\Index(name="open_at_idx", columns={"open_at"})
  * })
  * @ORM\HasLifecycleCallbacks
@@ -347,5 +347,9 @@ class Visita {
     public function getAree()
     {
         return $this->aree;
+    }
+    
+    public function __toString() {
+        return $this->getUrl();
     }
 }
